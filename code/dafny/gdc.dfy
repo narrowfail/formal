@@ -8,8 +8,6 @@ function gcd(m: int, n: int): int
         else gcd(m, n-m) 
     }
 
-
-// Not working yet
 method gdc(a: int, b: int) returns (r: int)
     requires  a > 0  &&  b > 0;
     ensures r == gcd(a, b);
@@ -20,9 +18,9 @@ method gdc(a: int, b: int) returns (r: int)
         x := b;
 
         while (r != x)
-        invariant gcd(r, x) == gcd(a, b);
         invariant x > 0;
         invariant r > 0;
+        invariant gcd(r, x) == gcd(a, b);
         decreases  x+r;
         {
           if (r > x)
