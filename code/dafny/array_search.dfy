@@ -8,7 +8,6 @@ method has_sequential(a: array<int>, key: int) returns (ret: int)
         index := 0;
 
         while (index < a.Length)
-        // Pregunta: Otra inviariante key E elements a[1..i]
         invariant 0 <= index <= a.Length
         decreases  a.Length - index
         {

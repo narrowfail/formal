@@ -1,6 +1,6 @@
 method Main(){
     var i:int;
-    var a := new int[5];
+    var a := new int[6];
     a[0],a[1],a[2],a[3],a[4],a[5] := 3,9,1,8,3,4;
     i := max_one_way(a);
     print "Max:";
@@ -19,9 +19,8 @@ method max_one_way(a: array<int>) returns (mx: int)
         mx := a[index];
 
         while (index < a.Length)
-        // Pregunta: el limite menor lo infiere? a.low < index < a.lenght
         // Pregunta: Otra inviariante max(a[i..j] = max(a))
-        invariant index <= a.Length
+        invariant 0 <= index <= a.Length
         decreases  a.Length - index
         {
             if a[index] > mx {
@@ -55,7 +54,6 @@ method max_one_way2(a: array<int>) returns (mx: int)
     }
 
 method max_two_way(a: array<int>) returns (mx: int)
-    //Pregunta: En la letra, en el loop solo baja los bordes y no evalua.
     requires a != null
     requires a.Length > 0
     {
