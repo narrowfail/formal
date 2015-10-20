@@ -28,7 +28,7 @@ function sorted(a: array<int>, index: int): bool
     { 
         if (index == a.Length - 1) then true 
         else if (index < a.Length - 1) then sorted(a, index + 1) 
-        else false 
+        else false
     }
 
 // Binary search
