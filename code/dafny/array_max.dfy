@@ -61,7 +61,6 @@ method max_one_way2(a: array<int>) returns (mx: int)
 method max_two_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
-    //ensures forall j : int :: (j >= 0 && j < a.Length ==> mx >= a[j])
     ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j]
     {
         var low, high: int;
@@ -72,10 +71,7 @@ method max_two_way(a: array<int>) returns (mx: int)
 
         while (low != high)
         invariant 0 <= low <= high < a.Length
-        // TODO think invariant.
-        //invariant forall j : int :: (j >= 0 && j <= low ==> a[j] <= mx)
-        //invariant forall j : int :: (j >= high && j < a.Length ==> a[j] <= mx)
-        invariant exists j : int :: j >= 0 && j < a.Length && mx == a[j]
+        invariant exists j : int :: j >= low && j <= high && mx == a[j]
         decreases  high - low
         {
             if a[low] > a[high] {
