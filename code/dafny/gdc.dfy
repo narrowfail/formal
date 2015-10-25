@@ -8,12 +8,13 @@ function gcd(m: int, n: int): int
         else gcd(m, n-m) 
     }
 
+
 method gdc(a: int, b: int) returns (r: int)
     requires  a > 0  &&  b > 0;
     ensures r == gcd(a, b);
     {
         var x: int;
-        //Ini
+        //Init
         r := a;
         x := b;
 

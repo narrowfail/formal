@@ -38,7 +38,7 @@ class ProportionalControl{
 
     // TODO Test this constructor!
     constructor ProportionalControl(newKp: real, newKb: real, newP: real)
-    modifies this
+    modifies this;
     {
         kp := newKp;
         kb := newKb;

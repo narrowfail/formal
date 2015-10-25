@@ -19,7 +19,6 @@ method Main() {
 //Discrete square root.
 method sqr(x:int) returns (r:int)
     requires x > 0;
-    //requires b > 0;
     ensures (r*r <= x && (r + 1)*(r+1) > x);
     ensures (r > 0);
     {

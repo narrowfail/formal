@@ -8,19 +8,21 @@ method Main(){
     print "\n";
 }
 
-
 method max_one_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
+    ensures forall j : int :: (j >= 0 && j < a.Length ==> mx >= a[j])
+    ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j]
     {
         var index, current: int;
-        //Ini
+        // Init
         index := 0;
         mx := a[index];
 
         while (index < a.Length)
-        // Pregunta: Otra inviariante max(a[i..j] = max(a))
         invariant 0 <= index <= a.Length
+        invariant forall j : int :: (j >= 0 && j < index ==> mx >= a[j])
+        invariant exists j : int :: j >= 0 && j < a.Length && mx == a[j]
         decreases  a.Length - index
         {
             if a[index] > mx {
@@ -34,16 +36,18 @@ method max_one_way(a: array<int>) returns (mx: int)
 method max_one_way2(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
+    ensures forall j : int :: (j >= 0 && j < a.Length ==> mx >= a[j])
+    ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j]
     {
         var index, current: int;
-        //Ini
+        // Init
         index := a.Length - 1;
         mx := a[index];
 
         while (index >= 0)
-        // Pregunta: el limite menor lo infiere? a.low < index < a.lenght
-        // Pregunta: Otra inviariante max(a[i..j] = max(a))
         invariant -1 <= index <= a.Length
+        invariant forall j : int :: (j > index && j < a.Length ==> mx >= a[j])
+        invariant exists j : int :: j >= 0 && j < a.Length && mx == a[j]
         decreases  index
         {
             if a[index] > mx {
@@ -53,18 +57,25 @@ method max_one_way2(a: array<int>) returns (mx: int)
         }
     }
 
+
 method max_two_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
+    //ensures forall j : int :: (j >= 0 && j < a.Length ==> mx >= a[j])
+    ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j]
     {
         var low, high: int;
-        //Ini
+        // Init
         low := 0;
         high := a.Length - 1;
+        mx := a[low];
 
         while (low != high)
-        // Pregunta: Otra inviariante max(a[i..j] = max(a))
-        invariant 0 <= low <= high < a.Length;
+        invariant 0 <= low <= high < a.Length
+        // TODO think invariant.
+        //invariant forall j : int :: (j >= 0 && j <= low ==> a[j] <= mx)
+        //invariant forall j : int :: (j >= high && j < a.Length ==> a[j] <= mx)
+        invariant exists j : int :: j >= 0 && j < a.Length && mx == a[j]
         decreases  high - low
         {
             if a[low] > a[high] {
