@@ -8,24 +8,8 @@ predicate sorted(a: array<int>, low: int, high :int)
     }
 
 
-// Recursive count
-function count(item: int, a: seq<int>): nat
-{
-    if |a|== 0 then 0
-    else if item == a[0] then 1 + count(item, a[1..])
-         else count(item, a[1..])
-}
-
-
-// Is permutation method
-predicate perm(a: seq<int>, b: seq<int>)
-    requires |a| == |b|
-    {
-      forall t :: count(t, a) == count(t, b)
-    }
-
-
-method swap(a: array<int>, first: nat, second: nat)
+// Swap two items from an array
+method swap<T>(a: array<T>, first: nat, second: nat)
     requires a != null
     requires a.Length > 0
     requires 0 <= first < a.Length
@@ -34,10 +18,12 @@ method swap(a: array<int>, first: nat, second: nat)
     ensures old(a.Length) == a.Length
     ensures old(a[first]) == a[second]
     ensures old(a[second]) == a[first]
-    ensures perm(a[..], old(a[..]))
+    ensures forall m :: 0 <= m < a.Length && m != first
+                        && m != second ==> a[m] == old(a[m])
+    ensures multiset(a[..]) == old(multiset(a[..]))
     {
         //Init
-        var tmp: int;
+        var tmp: T;
         tmp := a[first];
         a[first] := a[second];
         a[second] := tmp;
