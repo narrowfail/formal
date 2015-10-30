@@ -11,7 +11,7 @@ method Main(){
 method max_one_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
-    ensures forall j : int :: (j >= 0 && j < a.Length ==> mx >= a[j])
+    ensures forall j : int :: j >= 0 && j < a.Length ==> mx >= a[j]
     ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j]
     {
         var index, current: int;
@@ -22,6 +22,7 @@ method max_one_way(a: array<int>) returns (mx: int)
         while (index < a.Length)
         invariant 0 <= index <= a.Length
         invariant forall j : int :: (j >= 0 && j < index ==> mx >= a[j])
+        // TODO Check
         invariant exists j : int :: j >= 0 && j < a.Length && mx == a[j]
         decreases  a.Length - index
         {
@@ -36,7 +37,7 @@ method max_one_way(a: array<int>) returns (mx: int)
 method max_one_way2(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
-    ensures forall j : int :: (j >= 0 && j < a.Length ==> mx >= a[j])
+    ensures forall j : int :: j >= 0 && j < a.Length ==> mx >= a[j]
     ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j]
     {
         var index, current: int;
@@ -46,7 +47,7 @@ method max_one_way2(a: array<int>) returns (mx: int)
 
         while (index >= 0)
         invariant -1 <= index <= a.Length
-        invariant forall j : int :: (j > index && j < a.Length ==> mx >= a[j])
+        invariant forall j : int :: j > index && j < a.Length ==> mx >= a[j]
         invariant exists j : int :: j >= 0 && j < a.Length && mx == a[j]
         decreases  index
         {
