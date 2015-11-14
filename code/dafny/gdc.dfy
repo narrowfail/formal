@@ -9,9 +9,11 @@ function gcd(m: int, n: int): int
         else gcd(m, n-m) 
     }
 
+
 // GDC
 method gdc(a: int, b: int) returns (r: int)
-    requires  a > 0  &&  b > 0;
+    requires  a > 0;
+    requires b > 0;
     ensures r == gcd(a, b);
     {
         var x: int;

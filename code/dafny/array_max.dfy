@@ -8,6 +8,7 @@ method Main(){
     print "\n";
 }
 
+
 method max_one_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
