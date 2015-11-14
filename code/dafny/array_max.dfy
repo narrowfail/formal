@@ -1,14 +1,4 @@
-method Main(){
-    var i:int;
-    var a := new int[6];
-    a[0],a[1],a[2],a[3],a[4],a[5] := 3,9,1,8,3,4;
-    i := max_one_way(a);
-    print "Max:";
-    print i;
-    print "\n";
-}
-
-
+// Array max one way
 method max_one_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
@@ -59,7 +49,7 @@ method max_one_way2(a: array<int>) returns (mx: int)
         }
     }
 
-
+// Array max 2 way
 method max_two_way(a: array<int>) returns (mx: int)
     requires a != null
     requires a.Length > 0
