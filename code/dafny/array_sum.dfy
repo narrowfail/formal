@@ -1,3 +1,5 @@
+// Write functional verion.
+
 // Array sum
 method array_sum(a: array<int>) returns (sum: int)
     requires a != null;

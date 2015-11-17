@@ -41,7 +41,7 @@ method power_binary(a: int, b: int) returns (ret: int)
 
         while (y != 0)
         invariant  y >= 0;
-        //invariant  ret * pow(x, y) == pow(a, b);
+        invariant  ret * pow(x, y) == pow(a, b);
         decreases y;
         {
           if (y % 2 == 0)

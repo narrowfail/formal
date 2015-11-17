@@ -10,7 +10,6 @@ predicate sorted(a: array<int>, low: int, high :int)
 
 // Swap two items from an array
 method swap<T>(a: array<T>, first: nat, second: nat)
-    //TODO Redundant
     requires a != null;
     requires a.Length > 0;
     requires 0 <= first < a.Length;
@@ -32,7 +31,7 @@ method bubble_sort(a: array<int>)
     requires a != null;
     modifies a;
     ensures multiset(a[..]) == old(multiset(a[..]));
-    ensures sorted(a, 0, a.Length);
+    //ensures sorted(a, 0, a.Length);
     {
         var r: int;
         // Init
@@ -40,17 +39,19 @@ method bubble_sort(a: array<int>)
 
         while (r !=0 )
         invariant 0 <= r <= a.Length;
-        invariant sorted(a, r, a.Length);
-        invariant forall j, k : int :: j >= 0 && j < r - 1 && r <= k < a.Length ==> a[j] <= a[k];
+        invariant multiset(a[..]) == old(multiset(a[..]));
+        //invariant sorted(a, r, a.Length);
+        //invariant forall j, k : int :: j >= 0 && j < r && r <= k < a.Length ==> a[j] <= a[k];
         decreases r;
         {
             var i: int;
             // Init
             i := 0;
 
-            while (i != r-1)
-            //invariant a[i] >= a[0..i]
+            while (i+1 != r)
             invariant 0 <= i < r;
+            //invariant forall j : int :: j >= 0 && j < i ==> a[j] <= a[i];
+            invariant multiset(a[..]) == old(multiset(a[..]));
             decreases r - i;
             {
                 // Order element
@@ -61,6 +62,8 @@ method bubble_sort(a: array<int>)
                 i := i + 1;
             }
             // Loop decrement
-            r := r -1;
+            r := r - 1;
         }
     }
+
+// 1,8,2

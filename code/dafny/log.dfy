@@ -20,9 +20,9 @@ include "exponentiation.dfy"
 method log_int(a:int, b:int) returns (r: int)
     requires b > 1;
     requires a > 0;
-    decreases *;
-    //ensures pow(b, r) <= a;
-    //ensures pow(b, r + 1) > a;
+    ensures r >= 0;
+    ensures pow(b, r) <= a;
+    ensures pow(b, r + 1) > a;
     {
         var next: int;
         // Init
@@ -30,28 +30,15 @@ method log_int(a:int, b:int) returns (r: int)
         next := power_simple(b, r + 1);
 
         while (next <= a)
-        invariant 0 <= r
+        invariant 0 <= r;
         //invariant r < a;
-        //invariant pow(b, r) <= a;
-        //decreases a - pow(b, r + 1);
-        decreases *;
+        invariant next == pow(b, r +1);
+        invariant pow(b, r) <= a;
+        decreases a - pow(b, r + 1);
         {
             r := r + 1;
             next := power_simple(b, r + 1);
         }
         return r;
     }
-
-// Python code:
-/*def log(a, b):
-    r = 0
-    next = b ** 1
-    while next <= a:
-        r = r + 1
-        next = b ** (r + 1)
-        print "R:%s" % r
-        print "B^R:%s" % ((b**r))
-        print "A - B^R:%s" % (a - (b**(r+1)))
-        #print "r < a | %s" % (r < a)
-    print "b ** r <= a | %s" % (b ** r <= a)
-    return r*/
+    
