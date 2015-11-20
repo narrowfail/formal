@@ -27,6 +27,22 @@ method swap<T>(a: array<T>, first: nat, second: nat)
     }
 
 
+method swap_next(a: array<int>, index: int)
+    requires a != null;
+    requires a.Length > 1;
+    requires index + 1 < a.Length;
+    requires index >= 0;
+    ensures a[index] <= a[index + 1];
+    ensures multiset(a[..]) == old(multiset(a[..]));
+    ensures sorted(a, index, index + 1);
+    modifies a;
+    {
+        if(a[index] > a[index+1]){
+            swap(a, index, index+1);
+        }
+    }
+
+
 method bubble_sort(a: array<int>)
     requires a != null;
     modifies a;
@@ -52,12 +68,11 @@ method bubble_sort(a: array<int>)
             invariant 0 <= i < r;
             //invariant forall j : int :: j >= 0 && j < i ==> a[j] <= a[i];
             invariant multiset(a[..]) == old(multiset(a[..]));
+            invariant sorted(a, i, i+1);
             decreases r - i;
             {
                 // Order element
-                if(a[i] > a[i+1]){
-                    swap(a, i, i+1);
-                }
+                swap_next(a, i);
                 // Loop increment
                 i := i + 1;
             }
