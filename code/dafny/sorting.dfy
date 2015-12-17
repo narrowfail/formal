@@ -49,7 +49,7 @@ method bubble_sort(a:array<int>)
         }
     }
 
-
+// Insertion Sort
 method insertion_sort(a:array<int>)
     modifies a;
     requires a != null;
@@ -89,4 +89,48 @@ method insert(a:array<int>, i :int)
             a[j], a[j-1] := a[j-1], a[j];
             j := j - 1;
         } 
+    }
+    
+// Selection sort - Work in progress ...
+method selection_sort(a:array<int>)
+    modifies a;
+    requires a != null;
+    ensures multiset(a[..]) == old(multiset(a[..]));
+    ensures sorted(a,0,a.Length)
+    {
+        var i : int;
+        i := 0;
+        while(i < a.Length - 1)
+        invariant 0 <= i <= a.Length;
+        invariant multiset(a[..]) == old(multiset(a[..]));
+        invariant sorted(a,0,i);
+        {
+            select(a, i);
+            i := i + 1;
+        }
+    }
+
+method select(a:array<int>, i :int)
+    modifies a;
+    requires a != null;
+    requires 0 <= i < a.Length;
+    requires sorted(a, 0, i);
+    ensures sorted(a, 0, i+1);
+    ensures multiset(a[..]) == old(multiset(a[..]));
+    {
+        var min, j: int;
+        min := i;
+        j := i + 1;
+        while(j < a.Length)
+        invariant i + 1 <= j <= a.Length;
+        invariant i <= min < a.Length;
+        invariant sorted(a, 0, i);
+        invariant multiset(a[..]) == old(multiset(a[..]));
+        {
+            if (a[j] < a[min]){
+                min := j;
+            }
+            j := j + 1;
+        } 
+        a[i], a[min] := a[min], a[i];
     }
