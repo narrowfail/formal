@@ -10,11 +10,12 @@
 //    print a[2];
 //}
 
-method shift_right(a:array<bool>)
+method circular_shift_right(a:array<bool>)
     modifies a;
     requires a != null;
     requires a.Length > 1;
-    //ensures multiset(a[..]) == old(multiset(a[..]));
+    ensures a[0] == old(a[a.Length - 1]);
+    ensures forall j :: 0 < j < a.Length ==> a[j] == old(a[j-1]);
     {
         var i : int;
         var tmp : bool;
@@ -24,10 +25,12 @@ method shift_right(a:array<bool>)
 
         while(i > 0)
         invariant 0 <= i < a.Length;
+        invariant a[0..i] == old(a[0..i]);
+        invariant forall j :: i < j < a.Length ==> a[j] == old(a[j-1]);
         {
             a[i] := a[i-1];
             i := i - 1;
         }
         a[0] := tmp;
-        //assert(multiset(a[..]) == old(multiset(a[..])));
     }
+
