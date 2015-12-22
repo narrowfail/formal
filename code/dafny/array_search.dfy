@@ -5,7 +5,7 @@ method has_sequential(a: array<int>, key: int) returns (ret: int)
     ensures ret >= 0 ==> ret < a.Length && a[ret] == key
     ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key
     {
-        //Ini
+        // Ini
         var index: int;
         index := 0;
         ret := -1;
@@ -44,20 +44,26 @@ predicate sorted(a: array<int>)
        forall j, k :: 0 <= j < k < a.Length ==> a[j] <= a[k]
     }
 
-// Binary search - Not working.
+// Binary search
 method has_binary(a: array<int>, key: int) returns (ret: int)
-    requires a != null
-    requires a.Length > 0
-    requires sorted(a)
-    // result = 0 => key belongs elements(a)
+    requires a != null;
+    requires a.Length > 0;
+    requires sorted(a);
+    ensures 0 <= ret < a.Length;
+    // TODO Revisar!
+    // ensures exists j :: 0 <= j < a.Length ==> a[j] == a[ret];
     {
         var min, max, x: int;
         //Init
         min := 0;
         max := a.Length - 1;
         x := 0;
+        ret := min;
         while(max != min)
-        //invariant 0 <= min <= x <= max < a.Length;
+        invariant 0 <= min <= max < a.Length;
+        invariant 0 <= x < a.Length;
+        invariant 0 <= min <= ret <= max < a.Length;
+        // invariant exists j :: 0 <= j < a.Length ==> a[j] == a[ret];
         decreases max - min;
         {
             x := (max + min) / 2;
