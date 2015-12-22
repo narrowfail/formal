@@ -50,8 +50,9 @@ method has_binary(a: array<int>, key: int) returns (ret: int)
     requires a.Length > 0;
     requires sorted(a);
     ensures 0 <= ret < a.Length;
-    // TODO Revisar!
-    // ensures exists j :: 0 <= j < a.Length ==> a[j] == a[ret];
+    // TODO
+    //ensures ret >= 0 ==> ret < a.Length && a[ret] == key
+    //ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key
     {
         var min, max, x: int;
         //Init
