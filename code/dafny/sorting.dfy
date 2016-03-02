@@ -96,45 +96,47 @@ method insert(a:array<int>, i :int)
 method selection_sort(a:array<int>)
     modifies a;
     requires a != null;
-    ensures multiset(a[..]) == old(multiset(a[..]));
-    ensures sorted(a, 0, a.Length);
+    requires a.Length > 0;
+    //ensures multiset(a[..]) == old(multiset(a[..]));
+    //ensures sorted(a, 0, a.Length);
     {
-        var i : int;
+        var m, i : int;
         i := 0;
         while(i < a.Length - 1)
-        invariant 0 <= i <= a.Length;
-        invariant multiset(a[..]) == old(multiset(a[..]));
-        invariant sorted(a, 0, i);
+        invariant 0 <= i < a.Length;
+        //invariant multiset(a[..]) == old(multiset(a[..]));
+        //invariant sorted(a, 0, i);
         {
-            select(a, i);
+            m := select(a, i);
+            // Swap
+            a[i], a[m] := a[m], a[i];
+            // Step
             i := i + 1;
         }
     }
 
 
-method select(a:array<int>, i :int)
-    modifies a;
+method select(a:array<int>, i :int) returns (m: int)
     requires a != null;
     requires 0 <= i < a.Length;
-    requires sorted(a, 0, i);
-    ensures sorted(a, 0, i+1);
-    ensures multiset(a[..]) == old(multiset(a[..]));
+    //requires sorted(a, 0, i);
+    ensures m <= i < a.Length;
+    //ensures multiset(a[..]) == old(multiset(a[..]));
     {
-        var min, j: int;
-        min := i;
-        j := i + 1;
-        while(j < a.Length)
-        invariant i <= min < a.Length;
-        invariant i + 1 <= j < a.Length; // Assertion problems!
-        invariant sorted(a, 0, i);
-        invariant multiset(a[..]) == old(multiset(a[..]));
-        {
-            if (a[j] < a[min]){
-                min := j;
-            }
-            j := j + 1;
-        } 
-        a[i], a[min] := a[min], a[i];
-        assert(forall m :: 0 <= m <= i ==> a[m] <= a[min]);
-        assert(forall m :: m > i && m < a.Length ==> a[m] >= a[min]);
+        //var j: int;
+        //j := i + 1;
+        //while(j < a.Length)
+        //invariant i <= min < a.Length;
+        //invariant i + 1 <= j < a.Length; // Assertion problems!
+        //invariant sorted(a, 0, i);
+        //invariant multiset(a[..]) == old(multiset(a[..]));
+        //{
+        //    if (a[j] < a[min]){
+        //        ret := j;
+        //    }
+        //    j := j + 1;
+        //} 
+        
+        //assert(forall m :: 0 <= m <= i ==> a[m] <= a[min]);
+        ///assert(forall m :: m > i && m < a.Length ==> a[m] >= a[min]);
     }
