@@ -1,6 +1,7 @@
 // Mutiply using sum
 method mutiply_sum(a: int, b: int) returns (r: int)
-    requires b > 0;
+    requires a >= 0;
+    requires b >= 0;
     ensures r == a*b;
     {
         var x: int;

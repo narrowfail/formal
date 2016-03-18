@@ -50,7 +50,7 @@ method has_binary(a: array<int>, key: int) returns (ret: int)
     requires a.Length > 0;
     requires sorted(a);
     ensures 0 <= ret < a.Length;
-    // TODO
+    // TODO Mail tato
     //ensures ret >= 0 ==> ret < a.Length && a[ret] == key
     //ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key
     {
