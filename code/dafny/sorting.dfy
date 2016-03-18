@@ -92,7 +92,7 @@ method insert(a:array<int>, i :int)
     }
 
 
-// Selection Sort - Work in progress
+// Selection Sort
 method selection_sort(a:array<int>)
     modifies a;
     requires a != null;

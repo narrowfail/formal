@@ -1,10 +1,21 @@
-// Write functional verion.
+// Functional sum.
+function func_sum(a: array<int>, min: int, max:int): int
+    requires a != null;
+    requires 0 <= min <= max < a.Length;
+    reads a;
+	decreases max - min;
+    {
+		if min != max then
+			func_sum(a, min + 1, max) + a[min]
+		else
+			a[min]
+    }
 
 // Array sum
 method array_sum(a: array<int>) returns (sum: int)
     requires a != null;
     requires a.Length > 0;
-    //TODO ensure result is SUM
+	//TODO  ensures sum == func_sum(a, 0, a.Length - 1);
     {
         var index: int;
         // Init
@@ -13,7 +24,7 @@ method array_sum(a: array<int>) returns (sum: int)
 
         while (index < a.Length)
         invariant 0 <= index <= a.Length
-        //invariant forall j : int :: (j >= 0 && j < index ==> sum(a[0..j]))
+        // invariant sum == func_sum(a, 0, index);
         decreases  a.Length - index
         {
             sum := sum + a[index];
