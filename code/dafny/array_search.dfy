@@ -37,42 +37,39 @@ function sortedf(a: array<int>, index: int): bool
     }
 
 // Predicate version
-predicate sorted(a: array<int>)
-    requires a != null
-    reads a
-    {
-       forall j, k :: 0 <= j < k < a.Length ==> a[j] <= a[k]
-    }
+predicate sorted(a:array<int>, l:int, u:int)
+	reads a
+	requires a != null
+	{
+		forall j, k :: 0 <= l <= j <= k < u <= a.Length ==> a[j] <= a[k]
+	}
 
-// Binary search
-method has_binary(a: array<int>, key: int) returns (ret: int)
-    requires a != null;
-    requires a.Length > 0;
-    requires sorted(a);
-    ensures 0 <= ret < a.Length;
-    // TODO Mail tato
-    //ensures ret >= 0 ==> ret < a.Length && a[ret] == key
-    //ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key
-    {
-        var min, max, x: int;
-        //Init
-        min := 0;
-        max := a.Length - 1;
-        x := 0;
-        ret := min;
-        while(max != min)
-        invariant 0 <= min <= max < a.Length;
-        invariant 0 <= x < a.Length;
-        invariant 0 <= min <= ret <= max < a.Length;
-        // invariant exists j :: 0 <= j < a.Length ==> a[j] == a[ret];
-        decreases max - min;
-        {
-            x := (max + min) / 2;
-            if a[x] < key {
-                min := x + 1;
-            } else {
-                max := x;
-            }
-            ret := min;
-        }
-    }
+// Belongs to array predicate
+predicate array_member(a : array<int>, l : int, u : int, x : int)
+	reads a;
+	requires a != null;
+	{
+		0 <= l <= u < a.Length && exists j :: l <= j <= u && a[j] == x
+	}
+
+method binary_search(a : array<int>, x : int) returns (i : int)
+	requires a != null;
+	requires sorted(a, 0, a.Length);
+	ensures (0 <= i < a.Length && a[i] == x) ||
+			(i == a.Length && !array_member(a,0,a.Length-1,x))
+	{
+		var l, r : int;
+		l,r := 0, a.Length-1 ;
+		i := (l+r)/2;
+		while l <= r && x != a[i]
+		invariant  0 <= l <= a.Length
+		invariant -1 <= r < a.Length
+		invariant i == (l+r)/2
+		invariant array_member(a,0,a.Length-1,x) ==> array_member(a,l,r,x)
+		{
+			if x < a[i] {r := i-1;}
+			else if x > a[i] {l := i+1;}
+			i:=(l+r)/2;
+		}
+		if r<l {i:=a.Length;}
+	}		
