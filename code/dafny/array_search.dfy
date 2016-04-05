@@ -1,28 +1,3 @@
-// Sequential search
-method has_sequential(a: array<int>, key: int) returns (ret: int)
-    requires a != null
-    requires a.Length > 0
-    ensures ret >= 0 ==> ret < a.Length && a[ret] == key
-    ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key
-    {
-        // Ini
-        var index: int;
-        index := 0;
-        ret := -1;
-
-        while (index < a.Length)
-        invariant 0 <= index <= a.Length
-        invariant forall k :: 0 <= k < index ==> a[k] != key
-        decreases  a.Length - index
-        {
-            if a[index] == key {
-                ret := index;
-                return;
-            }
-            index := index + 1;
-        }
-    }
-
 // Functional version
 function sortedf(a: array<int>, index: int): bool
     requires a != null;
@@ -51,6 +26,59 @@ predicate array_member(a : array<int>, l : int, u : int, x : int)
 	{
 		0 <= l <= u < a.Length && exists j :: l <= j <= u && a[j] == x
 	}
+
+// Methods
+
+// Sequential search
+method has_sequential(a: array<int>, key: int) returns (ret: int)
+    requires a != null;
+    requires a.Length > 0;
+    ensures ret >= 0 ==> ret < a.Length && a[ret] == key;
+    ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key;
+    {
+        // Ini
+        var index: int;
+        index := 0;
+        ret := -1;
+
+        while (index < a.Length)
+        invariant 0 <= index <= a.Length
+        invariant forall k :: 0 <= k < index ==> a[k] != key
+        decreases  a.Length - index
+        {
+            if a[index] == key {
+                ret := index;
+                return;
+            }
+            index := index + 1;
+        }
+    }
+
+method has_sequential_sorted(a: array<int>, key: int) returns (ret: int)
+	requires a != null;
+	requires a.Length > 0;
+	requires sorted(a, 0, a.Length);
+	ensures ret >= 0 ==> ret < a.Length && a[ret] == key;
+    ensures ret < 0 ==> forall k :: 0 <= k < a.Length ==> a[k] != key;
+    {
+        // Ini
+        var index: int;
+		var salir: bool;
+        index := 0;
+        ret := -1;
+		salir := false;
+
+        while (index < a.Length)
+        invariant 0 <= index <= a.Length ;
+        invariant forall k :: 0 <= k < index ==> a[k] != key
+        decreases  a.Length - index;
+        {
+			if a[index] == key {ret:=index; return;}
+			if a[index] > key {return - 1;}
+			index := index + 1;
+        }		
+    }
+
 
 method binary_search(a : array<int>, x : int) returns (i : int)
 	requires a != null;
