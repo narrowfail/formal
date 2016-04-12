@@ -1,8 +1,10 @@
+// Invariant elimination example.
+
 //Discrete square root.
 method sqr(x:int) returns (r:int)
     requires x > 0;
-    ensures (r*r <= x && (r + 1)*(r+1) > x);
-    ensures (r > 0);
+    ensures r*r <= x && (r + 1) * (r+1) > x;
+    ensures  0 < r <= x;
     {
         r:=0;
         while (r + 1) * (r + 1) <= x
@@ -17,8 +19,8 @@ method sqr(x:int) returns (r:int)
 //Discrete square root
 method sqr2(x:int) returns (r:int)
     requires x > 0;
-    ensures (r*r <= x && (r + 1)*(r+1) > x);
-    ensures (r > 0);
+    ensures r*r <= x && (r + 1) * (r+1) > x;
+    ensures  0 < r <= x;
     {
         r:=x;
         while r*r > x
