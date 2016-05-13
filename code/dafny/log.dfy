@@ -1,22 +1,33 @@
-//LOG failing becuase of non-linear algebra not supported by Dafny!
-//method skl(m:nat, n:nat) returns (l:nat, r:nat)
-//    requires (m > 0 && n > 1);
-//    ensures r > 0;
-//    ensures (m == exp(n,l) * r && r%n != 0);
-//    {
-//        l,r:=0,m;
-//        while (r % n == 0)
-//            invariant m == exp(n,l) * r
-//            invariant r > 1
-//            decreases r
-//        {
-//            l,r:=l+1,r/n;
-//        }
-//    }
-
 include "exponentiation.dfy" 
 
-// TODO multiple questions
+
+lemma mon_prod (x : int, y : int)
+    requires x > 0
+    requires y > 1
+    ensures x < x*y 
+    {
+        assert 0 < x*(y-1) == x*y - x;
+    }
+
+
+method skl(m:nat, n:nat) returns (l:nat, r:nat)
+    requires (m > 0 && n > 1);
+    ensures r > 0;
+    ensures (m == pow(n,l) * r && r%n != 0);
+    {
+        l, r := 0, m;
+        while (r % n == 0)
+            invariant m == pow(n,l) * r
+            //invariant 0 <= l 
+            //invariant r > 0
+            decreases r
+        {
+            mon_prod(r/n, n);
+            l,r := l+1, r/n;
+        }
+    }
+
+
 method log_int(a:int, b:int) returns (r: int)
     requires b > 1;
     requires a > 0;
@@ -31,7 +42,6 @@ method log_int(a:int, b:int) returns (r: int)
 
         while (next <= a)
         invariant 0 <= r;
-        //invariant r < a;
         invariant next == pow(b, r +1);
         invariant pow(b, r) <= a;
         decreases a - pow(b, r + 1);
