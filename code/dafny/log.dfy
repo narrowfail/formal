@@ -2,9 +2,9 @@ include "exponentiation.dfy"
 
 
 lemma mon_prod (x : int, y : int)
-    requires x > 0
-    requires y > 1
-    ensures x < x*y 
+    requires x > 0;
+    requires y > 1;
+    ensures x < x*y;
     {
         assert 0 < x*(y-1) == x*y - x;
     }
@@ -51,4 +51,3 @@ method log_int(a:int, b:int) returns (r: int)
         }
         return r;
     }
-    
