@@ -98,7 +98,7 @@ method selection_sort(a:array<int>)
     requires a != null;
     requires a.Length > 0;
     ensures multiset(a[..]) == old(multiset(a[..]));
-    //ensures sorted(a, 0, a.Length);
+    ensures sorted(a, 0, a.Length);
     {
         var min, i : int;
         i := 0;
@@ -140,44 +140,76 @@ method select(a:array<int>, i :int) returns (m: int)
     }
 
 
-// Dutch National Flag - 0 = Red, 1 = White, 2 = Blue 
-method dnf(a: array<int>) 
+// Dutch National Flag - 0 = red, 1 = white, 2 = blue 
+/*method dnf(a: array<int>) 
     modifies a;
     requires a != null;
-	requires forall x :: 0 <= x < a.Length ==> (a[x] == 0 || a[x] == 1 || a[x] == 2);
-	// TODO Ensures flag order!
+    requires forall x :: 0 <= x < a.Length ==> (a[x] == 0 || a[x] == 1 || a[x] == 2);
+    // TODO Ensures flag order!
     ensures multiset(a[..]) == old(multiset(a[..]));
-	{
-		var low, mid, hig : int;
-		low, mid, hig := 0, 0, a.Length;
-		while(mid != hig)
-		invariant 0 <= low <= mid <= hig <=  a.Length;
-		// Flag order:
-		invariant forall x :: 0 <= x < low ==> a[x] == 0;
-		invariant forall y :: low <= y < mid ==> a[y] == 1;
-		//invariant forall z :: hig <= z < a.Length ==> a[z] == 2;
-		// Permutation
-		invariant multiset(a[..]) == old(multiset(a[..]));
-		{
-			// Red
-			if (a[mid] == 0)
-			{
-				a[low], a[mid] := a[mid], a[low];
-				low := low + 1;
-				mid := mid + 1;
-			}
-			else {
-				// White
-				if (a[mid] == 1){
-					mid := mid + 1;
-				}
-				else {
-					// Blue
-					//if (a[mid] == 2) {
-						hig := hig - 1;
-						a[hig], a[mid] := a[mid], a[hig];
-					//}
-				}
-			}
-		}
-	}
+    {
+        var low, mid, hig : int;
+        low, mid, hig := 0, 0, a.Length;
+        while(mid != hig)
+        invariant 0 <= low <= mid <= hig <=  a.Length;
+        // Flag order:
+        invariant forall x :: 0 <= x < low ==> a[x] == 0;
+        invariant forall y :: low <= y < mid ==> a[y] == 1;
+        invariant forall z :: hig <= z < a.Length ==> a[z] == 2;
+        // Permutation
+        invariant multiset(a[..]) == old(multiset(a[..]));
+        {
+            // red
+            if (a[mid] == 0)
+            {
+                a[low], a[mid] := a[mid], a[low];
+                low := low + 1;
+                mid := mid + 1;
+            }
+            else {
+                // white
+                if (a[mid] == 1){
+                    mid := mid + 1;
+                }
+                else {
+                    // blue
+                    //if (a[mid] == 2) {
+                        hig := hig - 1;
+                        //assert(a[mid] == 2);
+                        a[hig], a[mid] := a[mid], a[hig];
+                    //}
+                }
+            }
+        }
+    }
+*/
+
+datatype Color = red|white|blue
+
+predicate color_sorted(a: Color, b: Color) 
+{
+    a == red || b == blue || a == b
+}
+
+method dnf2(a:array<Color>)
+    modifies a;
+    requires a != null;
+    ensures forall i, j :: 0 <= i < j < a.Length ==> color_sorted(a[i],a[j]);
+    ensures multiset(a[..]) == old(multiset(a[..]));
+    {
+      var r, w, b := 0, 0, a.Length;
+      while ( w != b)
+      invariant 0 <= r <= w <= b <= a.Length
+      invariant forall i :: 0 <= i < r ==> a[i] == red;
+      invariant forall i :: r <= i < w ==> a[i] == white;
+      invariant forall i :: b <= i <a.Length ==> a[i] == blue;
+      invariant multiset(a[..]) == old(multiset(a[..]));
+      {
+        match a[w]
+          {
+              case red => a[r], a[w] := a[w], a[r]; r := r + 1; w := w + 1;
+              case white => w := w + 1;
+              case blue => b := b - 1; a[w], a[b] := a[b], a[w];
+          }
+      }
+    }
