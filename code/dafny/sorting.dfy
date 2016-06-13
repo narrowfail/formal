@@ -211,3 +211,52 @@ method dnf2(a:array<Color>)
           }
       }
     }
+
+
+// Quck Sort
+method quick_sort(a:array<int>, start:int, end:int)
+    modifies a;
+    requires a != null;
+    requires a.Length > 0;
+	requires 0 <= start <= end <= a.Length;
+    
+	// Pivot
+	requires 0 <= start <= end < a.Length ==> forall j :: start <= j < end ==> a[j] < a[end];
+	requires 0 < start <= end <= a.Length ==> forall j :: start <= j < end ==> a[start - 1] <= a[j];
+
+	// Sorted
+	ensures sorted(a, 0, a.Length);
+	ensures multiset(a[..]) == old(multiset(a[..]));
+	
+	// Pivot in correct place
+	ensures 0 <= start <= end < a.Length ==> forall j :: start <= j < end ==> a[j] < a[end];
+	ensures 0 < start <= end <= a.Length ==> forall j :: start <= j < end ==> a[start - 1] <= a[j];
+	
+	decreases end - start;
+    {
+        var pivot : int;
+		if (start < end) {
+			pivot := divide(a, start, end);
+ 
+			// Ordeno la lista de los menores
+			quick_sort(a, start, pivot - 1);
+ 
+			// Ordeno la lista de los mayores
+			quick_sort(a, pivot + 1, end);
+		}
+    }
+
+// Pivote
+method divide(a:array<int>, start:int, end:int) returns (pivot: int)
+	modifies a;
+    requires a != null;
+	requires a.Length > 0;
+    requires 0 <= start < end <= a.Length;
+    requires 0 <= start <= end < a.Length ==> forall j :: start <= j < end ==> a[j] < a[end];
+    requires 0 < start <= end <= a.Length ==> forall j :: start <= j < end ==> a[start - 1] <= a[j];
+    ensures 0 <= start <= pivot < end <= a.Length;
+    ensures forall j :: start <= j < pivot ==> a[j] < a[pivot];
+    ensures forall j :: pivot < j < end ==> a[pivot] <= a[j];
+	ensures multiset(a[..]) == old(multiset(a[..]));
+    ensures 0 <= start <= end < a.Length ==> forall j :: start <= j < end ==> a[j] < a[end];
+    ensures 0 < start <= end <= a.Length ==> forall j :: start <= j < end ==> a[start - 1] <= a[j];
