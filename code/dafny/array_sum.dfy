@@ -3,7 +3,7 @@ function func_sum(a: array<int>, min: int, max:int): int
     requires a != null;
     requires 0 <= min <= max < a.Length;
     reads a;
-	decreases max - min;
+    decreases max - min;
     {
 		if min != max then
 			func_sum(a, min + 1, max) + a[min]
@@ -15,7 +15,6 @@ function func_sum(a: array<int>, min: int, max:int): int
 method array_sum(a: array<int>) returns (sum: int)
     requires a != null;
     requires a.Length > 0;
-	//TODO  ensures sum == func_sum(a, 0, a.Length - 1);
     {
         var index: int;
         // Init
@@ -37,7 +36,6 @@ method array_sum(a: array<int>) returns (sum: int)
 method array_prod(a: array<int>) returns (prod: int)
     requires a != null;
     requires a.Length > 0;
-    //TODO ensure result is PROD
     {
         var index: int;
         // Init
