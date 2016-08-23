@@ -1,4 +1,4 @@
-// Recursive GDC
+// Functional GCD
 function gcd(m: int, n: int): int
     requires m > 0;
     requires n > 0;
@@ -10,8 +10,8 @@ function gcd(m: int, n: int): int
     }
 
 
-// GDC
-method gdc(a: int, b: int) returns (r: int)
+// GCD
+method gcd2(a: int, b: int) returns (r: int)
     requires  a > 0;
     requires b > 0;
     ensures r == gcd(a, b);
