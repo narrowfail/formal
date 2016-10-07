@@ -5,10 +5,10 @@ function func_sum(a: array<int>, min: int, max:int): int
     reads a;
     decreases max - min;
     {
-		if min != max then
-			func_sum(a, min + 1, max) + a[min]
-		else
-			a[min]
+        if min != max then
+            func_sum(a, min + 1, max) + a[min]
+        else
+            a[min]
     }
 
 // Array sum

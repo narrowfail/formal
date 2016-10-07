@@ -5,7 +5,7 @@ method max_one_way(a: array<int>) returns (mx: int)
     ensures forall j : int :: j >= 0 && j < a.Length ==> mx >= a[j];
     ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j];
     {
-        var index, current: int;
+        var index: int;
         // Init
         index := 0;
         mx := a[index];
@@ -30,7 +30,7 @@ method max_one_way2(a: array<int>) returns (mx: int)
     ensures forall j : int :: j >= 0 && j < a.Length ==> mx >= a[j];
     ensures exists j : int :: j >= 0 && j < a.Length && mx == a[j];
     {
-        var index, current: int;
+        var index: int;
         // Init
         index := a.Length - 1;
         mx := a[index];
